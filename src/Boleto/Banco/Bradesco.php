@@ -9,6 +9,7 @@ use Eduardokum\LaravelBoleto\Util;
 
 class Bradesco  extends AbstractBoleto implements BoletoContract
 {
+    protected $localPagamento = 'Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso';
     /**
      * Código do banco
      *
