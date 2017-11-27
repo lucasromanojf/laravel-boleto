@@ -33,7 +33,7 @@ class Pdf extends AbstractPdf implements PdfContract
     private $desc = 3; // tamanho célula descrição
     private $cell = 4; // tamanho célula dado
     private $fdes = 6; // tamanho fonte descrição
-    private $fcel = 8; // tamanho fonte célula
+    private $fcel = 6; // tamanho fonte célula
     private $small = 0.2; // tamanho barra fina
     private $totalBoletos = 0;
 
