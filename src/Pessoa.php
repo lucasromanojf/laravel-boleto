@@ -221,7 +221,8 @@ class Pessoa implements PessoaContract
         if (!$this->getDocumento()) {
             return $this->getNome();
         } else {
-            return $this->getNome() . ' / ' . $this->getTipoDocumento() . ': ' . $this->getDocumento();
+            return $this->getNome() . ' / ' . $this->getTipoDocumento() . ': ' . $this->getDocumento() . ' / ' .
+                $this->getEndereco() . ', ' . $this->getBairro() . ' - ' . $this->getCidade() . ' - ' . $this->getUf();
         }
     }
     /**
