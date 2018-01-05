@@ -100,9 +100,9 @@ class Bradesco extends AbstractRemessa implements RemessaContract
      * @return mixed
      * @throws \Exception
      */
-    public function getCodigoCliente()
+    public function getCodigoCliente($header = false)
     {
-        if (empty($this->codigoCliente)) {
+        if (empty($this->codigoCliente) || !$header) {
             $this->codigoCliente = Util::formatCnab('9', $this->getCarteiraNumero(), 4) .
             Util::formatCnab('9', $this->getAgencia(), 5) .
             Util::formatCnab('9', $this->getConta(), 7) .
@@ -139,7 +139,7 @@ class Bradesco extends AbstractRemessa implements RemessaContract
         $this->add(3, 9, 'REMESSA');
         $this->add(10, 11, '01');
         $this->add(12, 26, Util::formatCnab('X', 'COBRANCA', 15));
-        $this->add(27, 46, Util::formatCnab('9', $this->getCodigoCliente(), 20));
+        $this->add(27, 46, Util::formatCnab('9', $this->getCodigoCliente(true), 20));
         $this->add(47, 76, Util::formatCnab('X', $this->getBeneficiario()->getNome(), 30));
         $this->add(77, 79, $this->getCodigoBanco());
         $this->add(80, 94, Util::formatCnab('X', 'Bradesco', 15));
