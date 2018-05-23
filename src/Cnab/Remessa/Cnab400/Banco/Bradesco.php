@@ -71,6 +71,7 @@ class Bradesco extends AbstractRemessa implements RemessaContract
      *
      * @var array
      */
+
     protected $carteiras = ['04', '09', '28'];
 
     /**
@@ -100,15 +101,16 @@ class Bradesco extends AbstractRemessa implements RemessaContract
      * @return mixed
      * @throws \Exception
      */
-    public function getCodigoCliente($header = false)
+    public function getCodigoCliente()
     {
-        if ($header) {
-            return $this->codigoCliente;
-        }
-        return Util::formatCnab('9', $this->getCarteiraNumero(), 4) .
+        if (empty($this->codigoCliente)) {
+            $this->codigoCliente = Util::formatCnab('9', $this->getCarteiraNumero(), 4) .
             Util::formatCnab('9', $this->getAgencia(), 5) .
             Util::formatCnab('9', $this->getConta(), 7) .
             Util::formatCnab('9', $this->getContaDv() ?: CalculoDV::bradescoContaCorrente($this->getConta()), 1);
+        }
+
+        return $this->codigoCliente;
     }
 
     /**
@@ -138,11 +140,11 @@ class Bradesco extends AbstractRemessa implements RemessaContract
         $this->add(3, 9, 'REMESSA');
         $this->add(10, 11, '01');
         $this->add(12, 26, Util::formatCnab('X', 'COBRANCA', 15));
-        $this->add(27, 46, Util::formatCnab('9', $this->getCodigoCliente(true), 20));
+        $this->add(27, 46, Util::formatCnab('9', $this->getCodigoCliente(), 20));
         $this->add(47, 76, Util::formatCnab('X', $this->getBeneficiario()->getNome(), 30));
         $this->add(77, 79, $this->getCodigoBanco());
         $this->add(80, 94, Util::formatCnab('X', 'Bradesco', 15));
-        $this->add(95, 100, date('dmy'));
+        $this->add(95, 100, $this->getDataRemessa('dmy'));
         $this->add(101, 108, '');
         $this->add(109, 110, 'MX');
         $this->add(111, 117, Util::formatCnab('9', $this->getIdremessa(), 7));
@@ -169,9 +171,13 @@ class Bradesco extends AbstractRemessa implements RemessaContract
         $this->add(8, 12, '');
         $this->add(13, 19, '');
         $this->add(20, 20, '');
-        $this->add(21, 37, Util::formatCnab('9', $this->getCodigoCliente(), 17));
+        $this->add(21, 21, '0');
+        $this->add(22, 24, Util::formatCnab('9', $this->getCarteira(), 3));
+        $this->add(25, 29, Util::formatCnab('9', $this->getAgencia(), 5));
+        $this->add(30, 36, Util::formatCnab('9', $this->getConta(), 7));
+        $this->add(37, 37, Util::formatCnab('9', $this->getContaDv(), 1));
         $this->add(38, 62, Util::formatCnab('X', $boleto->getNumeroControle(), 25)); // numero de controle
-        $this->add(63, 65, Util::formatCnab('9', 0, 3, 2));
+        $this->add(63, 65, '000');
         $this->add(66, 66, $boleto->getMulta() > 0 ? '2' : '0');
         $this->add(67, 70, Util::formatCnab('9', $boleto->getMulta() > 0 ? $boleto->getMulta() : '0', 4, 2));
         $this->add(71, 82, Util::formatCnab('9', $boleto->getNossoNumero(), 12));

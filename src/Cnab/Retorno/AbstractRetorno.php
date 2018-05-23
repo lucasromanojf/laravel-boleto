@@ -100,7 +100,7 @@ abstract class AbstractRetorno implements \Countable, \SeekableIterator
             throw new \Exception(sprintf("Arquivo de retorno inválido"));
         }
 
-        $banco = Util::isCnab400($this->file[0]) ? substr($this->file[0], 76, 3) : substr($this->file[0], 0, 3);
+        $banco = Util::isCnab400($this->file[0]) ? mb_substr($this->file[0], 76, 3) : mb_substr($this->file[0], 0, 3);
         if (!in_array($banco, $bancosDisponiveis)) {
             throw new \Exception(sprintf("Banco: %s, inválido", $banco));
         }
@@ -130,6 +130,14 @@ abstract class AbstractRetorno implements \Countable, \SeekableIterator
     public function getTipo()
     {
         return Util::isCnab400($this->file[0]) ? 400 : 240;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFileContent()
+    {
+        return implode(PHP_EOL, $this->file);
     }
 
     /**
@@ -164,6 +172,14 @@ abstract class AbstractRetorno implements \Countable, \SeekableIterator
     public function getTrailer()
     {
         return $this->trailer;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTotais()
+    {
+        return $this->totais;
     }
 
     /**
