@@ -114,7 +114,7 @@
                 @include('BoletoHtmlRender::partials/ficha-compensacao-carne', ['i' => $i])
             </div>
             <div style="clear: both"></div>
-            @if(!(count($boletos) > 3 && $i > 0 && ($i+1) % 3 === 0))
+            @if(!($i > 0 && ($i+1) % 3 === 0))
                 <div class="linha-pontilhada">Corte na linha pontilhada</div>
             @endif
         </div>
@@ -124,7 +124,7 @@
         @endif
 
         @if (count($boletos) == ($i + 1))
-            <br/>
+            <div style="page-break-after:always"></div>
         @endif
     @endforeach
 @endsection
