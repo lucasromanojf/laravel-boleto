@@ -2,7 +2,7 @@
 @section('boleto')
     <style>
         .table-boleto .conteudo {
-            height: 11px;
+            height: 10px;
         }
     </style>
     @foreach($boletos as $i => $boleto)
@@ -12,7 +12,7 @@
                 @if (isset($logo))
                     <div style="display: inline-block; width: 180px; text-align: center">
                         <img style=" margin: auto 0; width: 100px; float: left; border-right: 2px solid #000;" alt="logo" src="{{ $logo_banco_base64 }}" />
-                        <div class="codbanco" style="font: 700 20px Arial; float: left;">{{ $codigo_banco_com_dv }}</div>
+                        <div class="codbanco" style="font: 700 16px Arial; float: left;">{{ $codigo_banco_com_dv }}</div>
                     </div>
                 @endif
 
@@ -22,7 +22,7 @@
                             <table style="width: 100%" cellpadding="0" cellspacing="0" border="0">
                                 <tr>
                                     <td style="border: none; border-right: 1px solid #000;">
-                                        <div class="titulo">Parcela/Plano</div>
+                                        <div class="titulo">Parcela</div>
                                         <div class="conteudo">{{ $numero_controle }}</div>
                                     </td>
                                     <td style="border: none;">
@@ -111,7 +111,7 @@
             </div>
             <div style="float: left; margin-left: 15px">
                 <!-- Ficha de compensação -->
-                @include('BoletoHtmlRender::partials/ficha-compensacao')
+                @include('BoletoHtmlRender::partials/ficha-compensacao-carne')
             </div>
             <div style="clear: both"></div>
             <div class="linha-pontilhada">Corte na linha pontilhada</div>
@@ -119,6 +119,10 @@
 
         @if(count($boletos) > 3 && $i > 0 && ($i+1) % 3 === 0)
             <div style="page-break-before:always"></div>
+        @endif
+
+        @if (count($boletos) == ($i + 1))
+            <br/>
         @endif
     @endforeach
 @endsection
