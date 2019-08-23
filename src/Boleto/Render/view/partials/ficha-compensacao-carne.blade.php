@@ -149,14 +149,14 @@
     <tr>
         <td colspan="7">
             <div style="display: block; width: 100%; min-height: 60px">
-                <div class="titulo">Pagador</div>
-                <div class="conteudo">{{ $pagador['nome'] }} {!! explode('/', $numero_controle)[0] == 1 ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' : '- ' !!}{{ strlen($pagador['documento']) == 14 ? 'CPF: ' : 'CNPJ: ' }}{{ $pagador['documento'] }}</div>
+                <div class="titulo">Pagador</div><div class="conteudo" style="position: absolute; right: 196px">{{ strlen($pagador['documento']) == 14 ? 'CPF: ' : 'CNPJ: ' }}{{ $pagador['documento'] }}</div>
+                <div class="conteudo">{{ $pagador['nome'] }}</div>
                 <div class="conteudo">{{ $pagador['endereco'] }}, {{ $pagador['bairro'] }}</div>
                 <div class="conteudo">{{ $pagador['endereco2'] }}</div>
             </div>
         </td>
         <td class="noleftborder">
-            <div class="titulo" style="vertical-align: bottom">Cód. Baixa</div>
+            <div class="titulo" style="vertical-align: bottom; margin-top:44px">Cód. Baixa</div>
         </td>
     </tr>
 
