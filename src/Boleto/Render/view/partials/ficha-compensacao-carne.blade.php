@@ -172,7 +172,7 @@
     </tr>
 
     <tr>
-        <td colspan="8" class="noborder" {!! explode('/', $numero_controle)[0] % 3 == 0 ? '' : 'style="padding-bottom: 8px"' !!}>
+        <td colspan="8" class="noborder" {!! $i > 0 && ($i+1) % 3 == 0 ? '' : 'style="padding-bottom: 8px"' !!}>
             {!! $codigo_barras !!}
         </td>
     </tr>
