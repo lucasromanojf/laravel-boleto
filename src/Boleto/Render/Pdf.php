@@ -336,7 +336,13 @@ class Pdf extends AbstractPdf implements PdfContract
         $this->Cell(0, $this->desc, $this->_('Pagador'), 'LR', 1);
 
         $this->SetFont($this->PadraoFont, 'B', $this->fcel);
-        $this->Cell(0, $this->cell, $this->_($this->boleto[$i]->getPagador()->getNomeDocumento()), 'LR', 1);
+        if ($this->boleto[$i]->getPagador()->isDoacao()) {
+            $this->Cell(0, $this->cell, $this->_($this->boleto[$i]->getPagador()->getNome())
+                . '                                                                                                                                                                                                '
+                . ((strlen($this->boleto[$i]->getPagador()->getDocumento()) == 14 ? 'CPF: ' : 'CNPJ: ') . $this->boleto[$i]->getPagador()->getDocumento()), 'LR', 1);
+        } else {
+            $this->Cell(0, $this->cell, $this->_($this->boleto[$i]->getPagador()->getNomeDocumento()), 'LR', 1);
+        }
         $this->Cell(0, $this->cell, $this->_(trim($this->boleto[$i]->getPagador()->getEndereco() . ' - ' . $this->boleto[$i]->getPagador()->getBairro()), ' -'), 'LR', 1);
         $this->Cell(0, $this->cell, $this->_($this->boleto[$i]->getPagador()->getCepCidadeUf()), 'LR', 1);
 
