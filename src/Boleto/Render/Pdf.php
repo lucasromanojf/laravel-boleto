@@ -337,9 +337,8 @@ class Pdf extends AbstractPdf implements PdfContract
 
         $this->SetFont($this->PadraoFont, 'B', $this->fcel);
         if ($this->boleto[$i]->getPagador()->isDoacao()) {
-            $this->Cell(0, $this->cell, $this->_($this->boleto[$i]->getPagador()->getNome())
-                . '                                                                                                                                                                                                '
-                . ((strlen($this->boleto[$i]->getPagador()->getDocumento()) == 14 ? 'CPF: ' : 'CNPJ: ') . $this->boleto[$i]->getPagador()->getDocumento()), 'LR', 1);
+            $this->Cell(0, $this->cell, (strlen($this->_($this->boleto[$i]->getPagador()->getDocumento())) == 14 ? 'CPF: ' : 'CNPJ: ') . $this->_($this->boleto[$i]->getPagador()->getDocumento()), 'LR', 1, 'R');
+            $this->Cell(0, $this->cell, $this->_($this->boleto[$i]->getPagador()->getNome()), 'LR', 1);
         } else {
             $this->Cell(0, $this->cell, $this->_($this->boleto[$i]->getPagador()->getNomeDocumento()), 'LR', 1);
         }
