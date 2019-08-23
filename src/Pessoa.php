@@ -33,6 +33,10 @@ class Pessoa implements PessoaContract
      * @var string
      */
     protected $documento;
+    /**
+     * @var boolean
+     */
+    protected $doacao;
 
     /**
      * @var boolean
@@ -119,6 +123,29 @@ class Pessoa implements PessoaContract
     public function getCidade()
     {
         return $this->cidade;
+    }
+
+    /**
+     * Define se é doação
+     *
+     * @param boolean $doacao
+     *
+     * @return Pessoa
+     */
+    public function setDoacao($doacao = true)
+    {
+        $this->doacao = $doacao;
+
+        return $this;
+    }
+    /**
+     * Retorna se é doação
+     *
+     * @return boolean
+     */
+    public function isDoacao()
+    {
+        return $this->doacao;
     }
 
     /**
@@ -333,6 +360,7 @@ class Pessoa implements PessoaContract
             'endereco2' => $this->getCepCidadeUf(),
 			'endereco_completo' => $this->getEnderecoCompleto(),
             'dda' => $this->isDda(),
+            'doacao' => $this->isDoacao(),
         ];
     }
 }
