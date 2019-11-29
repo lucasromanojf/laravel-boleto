@@ -235,8 +235,8 @@ class Bradesco extends AbstractRemessa implements RemessaContract
         if ($boleto->getStatus() == $boleto::STATUS_CUSTOM) {
             $this->add(16, 17, sprintf('%2.02s', $boleto->getComando()));
         }
-        $this->add(18, 18, strlen(Util::onlyNumbers($this->getBeneficiario()->getDocumento())) == 14 ? 2 : 1);
-        $this->add(19, 33, Util::formatCnab('9', Util::onlyNumbers($this->getBeneficiario()->getDocumento()), 15));
+        $this->add(18, 18, strlen(Util::onlyNumbers($boleto->getPagador()->getDocumento())) == 14 ? 2 : 1);
+        $this->add(19, 33, Util::formatCnab('9', Util::onlyNumbers($boleto->getPagador()->getDocumento()), 15));
         $this->add(34, 73, Util::formatCnab('X', $boleto->getPagador()->getNome(), 40));
         $this->add(74, 113, Util::formatCnab('X', $boleto->getPagador()->getEndereco(), 40));
         $this->add(114, 128, Util::formatCnab('X', $boleto->getPagador()->getBairro(), 15));
@@ -297,7 +297,7 @@ class Bradesco extends AbstractRemessa implements RemessaContract
         $this->add(216, 216, '');
         $this->add(217, 228, '000000000000');
         $this->add(229, 230, '');
-        $this->add(231, 231, '0');
+        $this->add(231, 231, '2');  //Não emite Aviso
         $this->add(232, 240, '');
 
         return $this;
@@ -407,7 +407,7 @@ class Bradesco extends AbstractRemessa implements RemessaContract
         $this->add(104, 183, '');
         $this->add(184, 191, Util::formatCnab('9', $this->getIdremessa(), 8));
         $this->add(192, 199, date('dmY'));
-        $this->add(200, 207, date('dmY'));
+        $this->add(200, 207, '00000000');   //Zerado (Informação exclusiva do retorno)
         $this->add(208, 240, '');
 
         return $this;
@@ -458,7 +458,7 @@ class Bradesco extends AbstractRemessa implements RemessaContract
         $this->add(9, 17, '');
         $this->add(18, 23, Util::formatCnab('9', 1, 6));
         $this->add(24, 29, Util::formatCnab('9', $this->getCount(), 6));
-        $this->add(30, 35, '000001');
+        $this->add(30, 35, '000000');   //Deve ser informado zeros (exclusivo para conciliação bancária)
         $this->add(36, 240, '');
 
         return $this;

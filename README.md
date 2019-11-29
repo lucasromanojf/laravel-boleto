@@ -11,6 +11,8 @@
 # Laravel Boleto
 Pacote para gerar boletos, remessas e leitura de retorno.
 
+**Projeto atualizado para o PHP 7.2, utilize sempre a última versão do PHP**
+
 [Documentação do Projeto](https://laravel-boleto.readthedocs.io/)
 
 ## Doações
@@ -27,6 +29,10 @@ Mas também, caso você ache que qualquer informação obtida aqui, lhe foi úti
 	<img alt="Doar com Pagseguro" src="https://stc.pagseguro.uol.com.br/public/img/botoes/doacoes/120x53-doar.gif"/></a>
         
 *Agradecemos a contribuição.*
+
+## Apoiadores
+<a target="_blank" href=" https://www.jetbrains.com/?from=LaravelBoleto">
+         <img alt="Jetbrains" width="100" src="https://account.jetbrains.com/static/images/jetbrains-logo-inv.svg"/></a>
 
 ## Apoiadores (Doações)
 

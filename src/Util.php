@@ -372,15 +372,12 @@ final class Util
             }
         }
         $formater->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, $decimals);
-        if (!$symbol) {
-            $pattern = preg_replace("/[¤]/", '', $formater->getPattern());
-            $formater->setPattern($pattern);
-        } else {
-            // ESPAÇO DEPOIS DO SIMBOLO
-            $pattern = str_replace("¤", "¤ ", $formater->getPattern());
-            $formater->setPattern($pattern);
+        $pattern = substr($formater->getPattern(), strpos($formater->getPattern(), '#'));
+        if ($symbol) {
+            $pattern = "¤ " . $pattern;
         }
-        return $formater->formatCurrency($number, $formater->getTextAttribute(\NumberFormatter::CURRENCY_CODE));
+        $formater->setPattern($pattern);
+        return trim($formater->formatCurrency($number, $formater->getTextAttribute(\NumberFormatter::CURRENCY_CODE)));
     }
 
     /**
@@ -495,9 +492,10 @@ final class Util
 
     /**
      * @param        Carbon|string $date
-     * @param string $format
+     * @param string               $format
      *
      * @return integer
+     * @throws \Exception
      */
     public static function fatorVencimento($date, $format = 'Y-m-d')
     {
@@ -514,7 +512,7 @@ final class Util
     public static function dataJuliano($date, $format = 'Y-m-d')
     {
         $date = ($date instanceof Carbon) ? $date : Carbon::createFromFormat($format, $date);
-        $dateDiff = $date->copy()->day(31)->month(12)->subYear(1)->diffInDays($date);
+        $dateDiff = $date->copy()->day(31)->month(12)->subYear()->diffInDays($date);
         return $dateDiff . mb_substr($date->year, -1);
     }
 
@@ -526,7 +524,7 @@ final class Util
      */
     public static function fatorVencimentoBack($factor, $format = 'Y-m-d')
     {
-        $date = Carbon::create(1997, 10, 7, 0, 0, 0)->addDay($factor);
+        $date = Carbon::create(1997, 10, 7, 0, 0, 0)->addDays($factor);
         return $format ? $date->format($format) : $date;
     }
 
@@ -544,7 +542,7 @@ final class Util
     {
         $sum = 0;
         for ($i = mb_strlen($n); $i > 0; $i--) {
-            $sum += mb_substr($n, $i - 1, 1)*$factor;
+            $sum += ((int) mb_substr($n, $i - 1, 1))*$factor;
             if ($factor == $base) {
                 $factor = 1;
             }
@@ -608,11 +606,11 @@ final class Util
     /**
      * @param $controle
      *
-     * @return null|string
+     * @return array
      */
     public static function controle2array($controle)
     {
-        $matches = '';
+        $matches = [];
         $matches_founded = [];
         preg_match_all('/(([A-Za-zÀ-Úà-ú]+)([0-9]*))/', $controle, $matches, PREG_SET_ORDER);
         if ($matches) {
@@ -627,7 +625,7 @@ final class Util
     /**
      * Pela remessa cria um retorno fake para testes.
      *
-     * @param $file Remessa
+     * @param $file
      * @param string       $ocorrencia
      *
      * @return string
@@ -705,7 +703,7 @@ final class Util
             case Contracts\Boleto\Boleto::COD_BANCO_BB:
                 if (self::remove(1, 1, $detalhe) != 7) {
                     unset($retorno[$i]);
-                    break;
+                    continue 2;
                 }
                 self::adiciona($retorno[$i], 1, 1, '7');
                 self::adiciona($retorno[$i], 64, 80, self::remove(64, 80, $detalhe));
