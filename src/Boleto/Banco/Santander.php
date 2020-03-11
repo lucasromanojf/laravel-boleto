@@ -210,6 +210,10 @@ class Santander extends AbstractBoleto implements BoletoContract
         if ($this->getDiasProtesto() > 0) {
             throw new \Exception('Você deve usar dias de protesto ou dias de baixa, nunca os 2');
         }
+        if (is_null($baixaAutomatica)) {
+            $this->diasBaixaAutomatica = 999;
+            return $this;
+        }
         if (!in_array($baixaAutomatica, [15, 30])) {
             throw new \Exception('O Banco Santander so aceita 15 ou 30 dias após o vencimento para baixa automática');
         }
