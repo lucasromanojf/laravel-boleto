@@ -7,7 +7,7 @@
     </style>
     @foreach($boletos as $i => $boleto)
         @php extract($boleto, EXTR_OVERWRITE); @endphp
-        <div style="width: 863px">
+        <div style="width: 950px">
             <div style="float: left; margin-top: 9px;">
                 @if (isset($logo))
                     <div style="display: inline-block; width: 180px; text-align: center">
