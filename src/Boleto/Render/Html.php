@@ -40,7 +40,7 @@ class Html implements HtmlContract
             view()->addNamespace('BoletoHtmlRender', realpath(__DIR__ . '/view/'));
             $this->blade = view();
         } else {
-            $blade = new Blade(realpath(__DIR__ . '/view/'), realpath(__DIR__ . '/cache/'));
+            $blade = new Blade(realpath(__DIR__ . '/view/'), storage_path('app'));
             $blade->view()->addNamespace('BoletoHtmlRender', realpath(__DIR__ . '/view/'));
             $this->blade = $blade->view();
         }
