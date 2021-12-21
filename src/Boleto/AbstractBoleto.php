@@ -1467,6 +1467,11 @@ abstract class AbstractBoleto implements BoletoContract
         return $this->campoCodigoBarras = substr($codigo, 0, 4) . $dv . substr($codigo, 4);
     }
 
+    public function setCodigoBarras($codigoBarras)
+    {
+        $this->campoCodigoBarras = $codigoBarras;
+    }
+
     /**
      * Retorna o código do banco com o dígito verificador
      *
