@@ -163,7 +163,7 @@ class Santander extends AbstractBoleto implements BoletoContract
      * @return AbstractBoleto
      * @throws \Exception
      */
-    public function setCarteira($carteira)
+    public function setCarteira($carteira, $ignorarInexistente = false)
     {
         switch ($carteira) {
             case '1':
@@ -174,7 +174,7 @@ class Santander extends AbstractBoleto implements BoletoContract
                 $carteira = '102';
                 break;
         }
-        return parent::setCarteira($carteira);
+        return parent::setCarteira($carteira, $ignorarInexistente);
     }
 
     /**
