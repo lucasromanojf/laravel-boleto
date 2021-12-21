@@ -1350,9 +1350,10 @@ abstract class AbstractBoleto implements BoletoContract
      *
      * @throws \Exception
      */
-    final public function setNossoNumero()
+    final public function setNossoNumero($nossoNumero)
     {
-        throw new \Exception('Não é possível definir o nosso número diretamente. Utilize o método setNumero.');
+        $this->campoNossoNumero = $nossoNumero;
+        return $this;
     }
 
     /**
@@ -1470,6 +1471,7 @@ abstract class AbstractBoleto implements BoletoContract
     public function setCodigoBarras($codigoBarras)
     {
         $this->campoCodigoBarras = $codigoBarras;
+        return $this;
     }
 
     /**
