@@ -430,10 +430,12 @@ abstract class AbstractBoleto implements BoletoContract
      * @return AbstractBoleto
      * @throws \Exception
      */
-    public function setCarteira($carteira)
+    public function setCarteira($carteira, $ignorarInexistente = false)
     {
-        if (!in_array($carteira, $this->getCarteiras())) {
-            throw new \Exception("Carteira não disponível!");
+        if (! $ignorarInexistente) {
+            if (!in_array($carteira, $this->getCarteiras())) {
+                throw new \Exception("Carteira não disponível!");
+            }
         }
         $this->carteira = $carteira;
 
