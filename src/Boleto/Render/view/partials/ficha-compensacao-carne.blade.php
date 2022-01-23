@@ -38,7 +38,7 @@
             <div class="conteudo">{{ $data_documento->format('d/m/Y') }}</div>
         </td>
         <td width="120" colspan="2">
-            <div class="titulo">Nº documento</div>
+            <div class="titulo">Nº doc.</div>
             <div class="conteudo">{{ $numero_documento }}</div>
         </td>
         <td width="60">
