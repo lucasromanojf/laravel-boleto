@@ -186,7 +186,8 @@ class PdfCaixa extends AbstractPdf implements PdfContract
             }
          }
 
-         $this->Cell(35, $this->cell, $this->_($this->boleto[$i]->getAgencia(). '/' .$this->boleto[$i]->getConta() . '-' .$codVerificador), 'R',1);
+         $codigoBeneficiario = $this->boleto[$i]->getAgencia(). '/' .$this->boleto[$i]->getConta() . '-' .$codVerificador;
+         $this->Cell(35, $this->cell, $this->_($this->boleto[$i]->getExibirContaCorrente() ? $codigoBeneficiario : substr($codigoBeneficiario, 0, -4).'****'), 'R',1);
 
          //terceira linha
          $this->SetFont($this->PadraoFont, '', $this->fdes);
@@ -338,7 +339,8 @@ class PdfCaixa extends AbstractPdf implements PdfContract
            }
          }
 
-        $this->Cell(50, $this->cell, $this->_($this->boleto[$i]->getAgencia(). '/' .$this->boleto[$i]->getConta().'-' .$codVerificador), 'LR', 1,'R');
+        $codigoBeneficiario = $this->boleto[$i]->getAgencia(). '/' .$this->boleto[$i]->getConta().'-' .$codVerificador;
+        $this->Cell(50, $this->cell, $this->_($this->boleto[$i]->getExibirContaCorrente() ? $codigoBeneficiario : substr($codigoBeneficiario, 0, -4).'****'), 'LR', 1,'R');
         $this->SetFont($this->PadraoFont, 'B', $this->fcel);
         $this->Cell(120, $this->desc, $this->_($this->boleto[$i]->getBeneficiario()->getEndereco() . ' - '. $this->boleto[$i]->getBeneficiario()->getBairro()), 'LR');
         $this->Cell(50, $this->desc, $this->_(''), 'LR', 1);

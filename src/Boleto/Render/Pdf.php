@@ -152,7 +152,7 @@ class Pdf extends AbstractPdf implements PdfContract
 
         $this->textFitCell(75, $this->cell, $this->_($this->boleto[$i]->getBeneficiario()->getNome()), 'LR', 0, 'L');
 
-        $this->Cell(35, $this->cell, $this->_($this->boleto[$i]->getAgenciaCodigoBeneficiario()), 'R');
+        $this->Cell(35, $this->cell, $this->_($this->boleto[$i]->getExibirContaCorrente() ? $this->boleto[$i]->getAgenciaCodigoBeneficiario() : substr($this->boleto[$i]->getAgenciaCodigoBeneficiario(), 0, -4).'****'), 'R');
         $this->Cell(10, $this->cell, $this->_('R$'), 'R');
         $this->Cell(15, $this->cell, $this->_(''), 'R');
         $this->Cell(35, $this->cell, $this->_($this->boleto[$i]->getNossoNumeroBoleto()), 'R', 1, 'R');
@@ -236,7 +236,7 @@ class Pdf extends AbstractPdf implements PdfContract
         $this->Cell(120, $this->cell, $this->_($this->boleto[$i]->getBeneficiario()->getNomeDocumento()), 'LR');
         $xBeneficiario = $this->GetX();
         $yBeneficiario = $this->GetY();
-        $this->Cell(50, $this->cell, $this->_($this->boleto[$i]->getAgenciaCodigoBeneficiario()), 'R', 1, 'R');
+        $this->Cell(50, $this->cell, $this->_($this->boleto[$i]->getExibirContaCorrente() ? $this->boleto[$i]->getAgenciaCodigoBeneficiario() : substr($this->boleto[$i]->getAgenciaCodigoBeneficiario(), 0, -4).'****'), 'R', 1, 'R');
         if($this->boleto[$i]->getMostrarEnderecoFichaCompensacao()) {
             $this->SetXY($xBeneficiario, $yBeneficiario);
             $this->Ln(4);

@@ -69,7 +69,7 @@
                 </td>
                 <td colspan="2">
                     <div class="titulo">Agência/Código do Beneficiário</div>
-                    <div class="conteudo">{{ $agencia_codigo_beneficiario }}</div>
+                    <div class="conteudo">{{ $exibir_conta_corrente ? $agencia_codigo_beneficiario : substr($agencia_codigo_beneficiario, 0, -4).'****' }}</div>
                 </td>
                 <td width="130" class="caixa-gray-bg">
                     <div class="titulo">Vencimento</div>

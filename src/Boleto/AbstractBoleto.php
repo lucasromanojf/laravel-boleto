@@ -308,6 +308,8 @@ abstract class AbstractBoleto implements BoletoContract
      */
     protected $mostrarEnderecoFichaCompensacao = false;
 
+    protected $exibirContaCorrente = true;
+
     /**
      * AbstractBoleto constructor.
      *
@@ -1544,6 +1546,18 @@ abstract class AbstractBoleto implements BoletoContract
         $this->mostrarEnderecoFichaCompensacao = $mostrarEnderecoFichaCompensacao;
     }
 
+    public function getExibirContaCorrente()
+    {
+        return $this->exibirContaCorrente;
+    }
+
+    public function setExibirContaCorrente($exibirContaCorrente)
+    {
+        $this->exibirContaCorrente = $exibirContaCorrente;
+
+        return $this;
+    }
+
     /**
      * Render PDF
      *
@@ -1682,6 +1696,7 @@ abstract class AbstractBoleto implements BoletoContract
                 'numero_documento' => $this->getNumeroDocumento(),
                 'numero_controle' => $this->getNumeroControle(),
                 'agencia_codigo_beneficiario' => $this->getAgenciaCodigoBeneficiario(),
+                'exibir_conta_corrente' => $this->getExibirContaCorrente(),
                 'nosso_numero' => $this->getNossoNumero(),
                 'nosso_numero_boleto' => $this->getNossoNumeroBoleto(),
                 'especie_doc' => $this->getEspecieDoc(),
