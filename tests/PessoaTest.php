@@ -147,4 +147,60 @@ class PessoaTest extends TestCase
         $this->assertEquals('99.99999.9-99', $pessoa->getDocumento());
 
     }
+
+    public function testPessoaCnpjAlfanumericoValido()
+    {
+        $pessoa = new Pessoa;
+        $pessoa->setDocumento('12ABC34501DE35');
+        $this->assertEquals('CNPJ', $pessoa->getTipoDocumento());
+        $this->assertEquals('12.ABC.345/01DE-35', $pessoa->getDocumento());
+    }
+
+    public function testPessoaCnpjAlfanumericoMinusculoNormaliza()
+    {
+        $pessoa = new Pessoa;
+        $pessoa->setDocumento('12abc34501de35');
+        $this->assertEquals('CNPJ', $pessoa->getTipoDocumento());
+        $this->assertEquals('12.ABC.345/01DE-35', $pessoa->getDocumento());
+    }
+
+    public function testPessoaCnpjAlfanumericoMascaradoNormaliza()
+    {
+        $pessoa = new Pessoa;
+        $pessoa->setDocumento('12.ABC.345/01DE-35');
+        $this->assertEquals('CNPJ', $pessoa->getTipoDocumento());
+        $this->assertEquals('12.ABC.345/01DE-35', $pessoa->getDocumento());
+    }
+
+    public function testPessoaCnpjAlfanumericoLetraNoDvLancaExcecao()
+    {
+        $this->expectException(Exception::class);
+        $pessoa = new Pessoa;
+        $pessoa->setDocumento('12ABC34501DEAB');
+    }
+
+    public function testPessoaCnpjAlfanumericoTresLetrasNaoEhCpf()
+    {
+        // 3 letras nas 12 primeiras posicoes: onlyNumbers daria 11 digitos (CPF)
+        // mas deve ser classificado como CNPJ alfanumerico
+        $pessoa = new Pessoa;
+        $pessoa->setDocumento('123456789AB012');
+        $this->assertEquals('CNPJ', $pessoa->getTipoDocumento());
+    }
+
+    public function testPessoaCpfNumericoInalterado()
+    {
+        $pessoa = new Pessoa;
+        $pessoa->setDocumento('99999999999');
+        $this->assertEquals('CPF', $pessoa->getTipoDocumento());
+        $this->assertEquals('999.999.999-99', $pessoa->getDocumento());
+    }
+
+    public function testPessoaCnpjNumericoInalterado()
+    {
+        $pessoa = new Pessoa;
+        $pessoa->setDocumento('99999999999999');
+        $this->assertEquals('CNPJ', $pessoa->getTipoDocumento());
+        $this->assertEquals('99.999.999/9999-99', $pessoa->getDocumento());
+    }
 }

@@ -1185,19 +1185,48 @@ final class Util
      */
     public static function validarCnpj($cnpj)
     {
-        $c = self::onlyNumbers($cnpj);
+        $c = strtoupper((string) $cnpj);
+        $c = preg_replace('/[^0-9A-Z]/', '', $c);
+
+        if (mb_strlen($c) != 14) {
+            return false;
+        }
+
+        // DVs (posicoes 12 e 13) devem ser digitos
+        if (! ctype_digit(substr($c, 12, 2))) {
+            return false;
+        }
+
+        // Rejeitar todos os caracteres iguais
+        if (preg_match('/^(.)\1{13}$/', $c)) {
+            return false;
+        }
+
+        // Converte cada caractere para valor numerico: '0'-'9' -> 0-9, 'A'-'Z' -> 17-42
+        $v = [];
+        for ($i = 0; $i < 14; $i++) {
+            $v[$i] = ord($c[$i]) - 48;
+        }
+
         $b = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
-        if (mb_strlen($c) != 14 || preg_match("/^{$c[0]}{14}$/", $c)) {
+
+        // DV1: pesos 5,4,3,2,9,8,7,6,5,4,3,2 sobre posicoes 0-11
+        $n = 0;
+        for ($i = 0; $i < 12; $i++) {
+            $n += $v[$i] * $b[$i + 1];
+        }
+        $dv1 = (($n % 11) < 2) ? 0 : 11 - ($n % 11);
+        if ($v[12] != $dv1) {
             return false;
         }
-        for ($i = 0, $n = 0; $i < 12; $n += $c[$i] * $b[++$i]);
-        if ($c[12] != ((($n %= 11) < 2) ? 0 : 11 - $n)) {
 
-            return false;
+        // DV2: pesos 6,5,4,3,2,9,8,7,6,5,4,3,2 sobre posicoes 0-12
+        $n = 0;
+        for ($i = 0; $i <= 12; $i++) {
+            $n += $v[$i] * $b[$i];
         }
-        for ($i = 0, $n = 0; $i <= 12; $n += $c[$i] * $b[$i++]);
-        if ($c[13] != ((($n %= 11) < 2) ? 0 : 11 - $n)) {
-
+        $dv2 = (($n % 11) < 2) ? 0 : 11 - ($n % 11);
+        if ($v[13] != $dv2) {
             return false;
         }
 
@@ -1210,6 +1239,14 @@ final class Util
      */
     public static function validarCnpjCpf($documento)
     {
+        $normalizado = strtoupper((string) $documento);
+        $normalizado = preg_replace('/[^0-9A-Z]/', '', $normalizado);
+
+        // Se contem letras, so pode ser CNPJ alfanumerico
+        if (preg_match('/[A-Z]/', $normalizado)) {
+            return self::validarCnpj($normalizado);
+        }
+
         $documento = Util::onlyNumbers($documento);
         if (strlen($documento) == 11) {
             return self::validarCpf($documento);

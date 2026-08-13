@@ -264,4 +264,48 @@ class UtilTest extends TestCase
         $this->assertNull(Util::tipoChavePix('000.000.001-00'));
         $this->assertNull(Util::tipoChavePix('texto-qualquer'));
     }
+
+    public function testValidarCnpjAlfanumericoValido()
+    {
+        // Vetor de teste oficial: 12ABC34501DE -> DVs 35
+        $this->assertTrue(Util::validarCnpj('12ABC34501DE35'));
+    }
+
+    public function testValidarCnpjAlfanumericoInvalido()
+    {
+        // DV errado
+        $this->assertFalse(Util::validarCnpj('12ABC34501DE36'));
+        $this->assertFalse(Util::validarCnpj('12ABC34501DE00'));
+    }
+
+    public function testValidarCnpjAlfanumericoLetraNoDv()
+    {
+        // Letras na posicao de DV
+        $this->assertFalse(Util::validarCnpj('12ABC34501DEAB'));
+    }
+
+    public function testValidarCnpjNumericoInaIterado()
+    {
+        // CNPJ numerico valido continua funcionando
+        $this->assertTrue(Util::validarCnpj('11444777000161'));
+        // CNPJ numerico invalido continua falhando
+        $this->assertFalse(Util::validarCnpj('11444777000162'));
+        // Todos iguais
+        $this->assertFalse(Util::validarCnpj('11111111111111'));
+    }
+
+    public function testValidarCnpjCpfComAlfanumerico()
+    {
+        $this->assertTrue(Util::validarCnpjCpf('12ABC34501DE35'));
+        // Com mascara
+        $this->assertTrue(Util::validarCnpjCpf('12.ABC.345/01DE-35'));
+    }
+
+    public function testValidarCnpjCpfNumericoInalterado()
+    {
+        // CPF valido
+        $this->assertTrue(Util::validarCnpjCpf('52998224725'));
+        // CNPJ numerico valido
+        $this->assertTrue(Util::validarCnpjCpf('11444777000161'));
+    }
 }

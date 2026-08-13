@@ -172,11 +172,22 @@ class Pessoa implements PessoaContract
      */
     public function setDocumento($documento)
     {
-        $documento = substr(Util::onlyNumbers($documento), -14);
-        if (! in_array(strlen($documento), [10, 11, 14, 0])) {
-            throw new ValidationException('Documento inválido');
+        $normalizado = strtoupper((string) $documento);
+        $normalizado = preg_replace('/[^0-9A-Z]/', '', $normalizado);
+
+        if (preg_match('/[A-Z]/', $normalizado)) {
+            // CNPJ alfanumerico: 12 chars alfanumericos + 2 digitos verificadores
+            if (! preg_match('/^[A-Z0-9]{12}[0-9]{2}$/', $normalizado)) {
+                throw new ValidationException('Documento inválido');
+            }
+            $this->documento = $normalizado;
+        } else {
+            $documento = substr(Util::onlyNumbers($documento), -14);
+            if (! in_array(strlen($documento), [10, 11, 14, 0])) {
+                throw new ValidationException('Documento inválido');
+            }
+            $this->documento = $documento;
         }
-        $this->documento = $documento;
 
         return $this;
     }
@@ -194,7 +205,7 @@ class Pessoa implements PessoaContract
             return Util::maskString(Util::onlyNumbers($this->documento), '##.#####.#-##');
         }
 
-        return Util::maskString(Util::onlyNumbers($this->documento), '##.###.###/####-##');
+        return Util::maskString($this->documento, '##.###.###/####-##');
     }
 
     /**
@@ -315,6 +326,10 @@ class Pessoa implements PessoaContract
      */
     public function getTipoDocumento()
     {
+        if (preg_match('/[A-Z]/', (string) $this->documento)) {
+            return 'CNPJ';
+        }
+
         $cpf_cnpj_cei = Util::onlyNumbers($this->documento);
 
         if (strlen($cpf_cnpj_cei) == 11) {
