@@ -311,6 +311,56 @@ final class Util
     }
 
     /**
+     * Normaliza documento (CPF/CNPJ) para campo posicional CNAB.
+     *
+     * Documento 100% numerico: onlyNumbers + zero-pad a esquerda (identico a formatCnab('9', onlyNumbers($doc), $tamanho)).
+     * Documento alfanumerico (CNPJ alfanumerico): normaliza [0-9A-Z] maiusculo, zero-pad a esquerda.
+     * Trunca pela esquerda (mb_substr(0, $tamanho)) como formatCnab '9'.
+     *
+     * @param string $documento Valor retornado por getDocumento() (pode conter mascara)
+     * @param int    $tamanho   Largura do campo CNAB
+     *
+     * @return string
+     */
+    public static function documentoCnab($documento, $tamanho)
+    {
+        $normalizado = preg_replace('/[^0-9A-Z]/', '', strtoupper((string) $documento));
+
+        return str_pad(mb_substr($normalizado, 0, $tamanho), $tamanho, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Normaliza documento removendo mascara e preservando letras [0-9A-Z].
+     *
+     * Uso: campos JSON ou posicoes sem zero-pad (ex: Delbank, Inter API).
+     *
+     * @param string $documento
+     *
+     * @return string
+     */
+    public static function normalizeDocumento($documento)
+    {
+        return preg_replace('/[^0-9A-Z]/', '', strtoupper((string) $documento));
+    }
+
+    /**
+     * Verifica se documento e de pessoa juridica (CNPJ numerico ou alfanumerico).
+     *
+     * Para uso na deteccao do tipo de inscricao nos layouts CNAB.
+     * CNPJ numerico: 14 digitos. CNPJ alfanumerico: contem letras.
+     *
+     * @param string $documento Valor retornado por getDocumento() (pode conter mascara)
+     *
+     * @return bool
+     */
+    public static function isDocumentoJuridico($documento)
+    {
+        $normalizado = preg_replace('/[^0-9A-Z]/', '', strtoupper((string) $documento));
+
+        return preg_match('/[A-Z]/', $normalizado) === 1 || strlen($normalizado) == 14;
+    }
+
+    /**
      * Função para limpar acentos de uma string
      *
      * @param string $string
